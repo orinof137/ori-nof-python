@@ -113,7 +113,7 @@ book_recommendations = [
     "The Giver",
     "The Chronicles of Narnia",
     "Artemis Fowl",
-    "Eragon"
+    "Eragon",
     "The Lord of the Rings (3 books)"
 ]
 
@@ -278,6 +278,21 @@ trivia_questions = [
 {"question": "What language has the most native speakers in the world?", "answer": "mandarin chinese"}
 ]
 
+angry_responses = [
+    "Hey! That's not nice.",
+    "Please be respectful.",
+    "I don't like rude language.",
+    "Let's keep the conversation polite."
+]
+
+bad_words = [
+    "idiot","stupid","dumb","moron","loser","jerk","shut up",
+    "nonsense","trash","ugly","annoying","hate you","pathetic","lame","ridiculous",
+     "fuck","fucking","shit","bitch","asshole","bastard",
+    "dick","piss off","bullshit","damn you","motherfucker",
+    "son of a bitch", "wtf","stfu"
+]
+
 rps_choices = ["rock", "paper", "scissors"]
 # =============================================================================
 # STEP 2: HELPER FUNCTIONS
@@ -300,19 +315,19 @@ def show_help():
     print()
     print_bot("I can tell jokes or shower thoughts")
     print()
-    print_bot("I can recommend books or movies to you")
+    print_bot("I can recommend books, movies, board games and video games to you")
     print()
     print_bot("I can tell you tips or facts")
     print()
-    print_bot("I can give you a variety of riddles")
+    print_bot("I can give you a variety of riddles or solve math problems(I can solve quadratic equations and simple math expressions with +, -, * operators)")
     print()
-    print_bot("I can play a variety of games or just talk!")
+    print_bot("I can play a variety of games or just talk!, you can feel free to ask me anything you want! ")
     print()
     
 
 # =============================================================================
 # STEP 3: GREETING FUNCTION
-# =============================================================================
+# =============================================================================s
 
 def greet_user():
     greeting = random.choice(greetings)
@@ -326,11 +341,13 @@ def greet_user():
     print()
     user_age = input("your age: ")
     print()
-    print_bot("Are you male or female?")
+    print_bot("Are you a male or a female? ")
     print()
     user_gender = input("you gender: ")
     print()
-    print_bot(f"{random.choice(greetings)}, {user_name}")
+    print_bot(f"{random.choice(greetings)} {user_name}, i'm here to have fun with you! ")
+    print()
+    print_bot("you have a great name! ")
     print()
     return user_name
 
@@ -426,14 +443,14 @@ def play_rps_game():
 
 def analyze_mood(message):
     happy_words = [
-        "happy","joyful", "cheerful", "delighted", "excited", "content", "pleased", "glad", "thrilled",
-                   "blissful", "grateful", "optimistic", "hopeful", "proud", "satisfied", "amused", "bright",
-                   "lively", "jolly", "merry", "playful", "energetic",
-                   "radiant", "sunny", "sparkling", "smiling", "uplifted",
-                   "inspired", "motivated", "peaceful", "relaxed", "thankful", "lucky", "fortunate",
-                   "fantastic", "wonderful", "amazing", "great", "excellent", "brilliant", "super", "awesome",
-                   "cool", "nice", "kind", "friendly", "lovely", "charming", "warm", "fun", "funny"
-                   ]
+                "happy","joyful", "cheerful", "delighted", "excited", "content", "pleased", "glad", "thrilled",
+                "blissful", "grateful", "optimistic", "hopeful", "proud", "satisfied", "amused", "bright",
+                "lively", "jolly", "merry", "playful", "energetic",
+                "radiant", "sunny", "sparkling", "smiling", "uplifted",
+                "inspired", "motivated", "peaceful", "relaxed", "thankful", "lucky", "fortunate",
+                "fantastic", "wonderful", "amazing", "great", "excellent", "brilliant", "super", "awesome",
+                "cool", "nice", "kind", "friendly", "lovely", "charming", "warm", "fun", "funny", "lol", "hilarious", "ha", "haha",
+                "lmao", "rofl", "lmfao", "funniest", "hilarious", "humorous", "comical", "witty",]
 
     sad_words = [
                 "sad", "unhappy", "miserable", "depressed", "gloomy", "melancholy", "down", "heartbroken", "lonely",
@@ -465,6 +482,18 @@ def trivia_game():
     selected_trivia_question = random.choice(trivia_questions)
     return selected_trivia_question
     
+def quadratic(a, b, c):
+    eqation = b**2 - 4*a*c
+    
+    if eqation < 0:
+        return "No real solutions"
+    
+    sqrt_equation = eqation ** 0.5
+    
+    x_1 = (-b + sqrt_equation) / (2*a)
+    x_2 = (-b - sqrt_equation) / (2*a)
+    
+    return x_1, x_2 
     
 # =============================================================================
 # STEP 5: MAIN RESPONSE FUNCTION
@@ -477,7 +506,11 @@ def get_response(message, user_name):
         if greet in message_lower:
             greeting =  random.choice(greetings)
             return f"{greeting}, {user_name}!"
-    
+        
+    for bad_word in bad_words:
+        if bad_word in message_lower:
+            return random.choice(angry_responses)
+
     if "how are you" in message_lower:
         return "I'm great! How are you?"
     
@@ -487,7 +520,11 @@ def get_response(message, user_name):
     if "teach" in message_lower:
         return "good to know!"
     
+    if "favorite" in message_lower or "prefer" in message_lower:
+        return "I'm a bot, I don't have favorites."
 
+    if "talk" in message_lower:
+        return "I love to talk! What would you like to discuss?, you can ask me questions, ask for recommendations, ask for jokes or shower thoughts, play games and more! if you want to know what I can do, type: 'help' or 'commands'"
 
     if "thanks" in message_lower or "thank" in message_lower:
         respon = random.choice(thanks_responses)
@@ -498,27 +535,27 @@ def get_response(message, user_name):
 
     if "joke" in message_lower or "funny" in message_lower or "jokes" in message_lower:
         joke = tell_joke()
-        return joke
+        return f"{joke}, if you want to hear another joke, type: 'joke' or 'funny' again!"
     
     if "shower thought" in message_lower or "shower thoughts" in message_lower:
         shower_thought = tell_shower_thoughts()
-        return shower_thought
+        return f"{shower_thought}, if you want to hear another shower thought, type: 'shower thought' again!"
 
     if "book" in message_lower or "books" in message_lower:
         book_recommendation = recommend_books()
-        return book_recommendation
+        return f"{book_recommendation}, if you already read it, type: 'book' and I will reccomend you another one!"
 
     if "movie" in message_lower or "movies" in message_lower:
         movie_recommendation = recommend_movie()
-        return movie_recommendation
+        return f"{movie_recommendation}, if you already watched it, type: 'movie' and I will reccomend you another one!"
     
     if "tip" in message_lower or "tips" in message_lower:
         tip = tell_tips()
-        return tip
+        return f"{tip}, if you want to hear another tip, type: 'tip' again!"
     
     if "fact" in message_lower or "facts" in message_lower:
         fact = tell_fact()
-        return fact
+        return f"{fact}, if you want to hear another fact, type: 'fact' again!"
 
     if "game" in message_lower or "play" in message_lower:
         return "game_menu"
@@ -526,6 +563,14 @@ def get_response(message, user_name):
     if "help" in message_lower or "commands" in message_lower:
         show_help()
         return "What else can I help with?"
+    
+    if "quadratic" in message_lower:
+            a = float(input("enter a: "))
+            b = float(input("enter b: "))
+            c = float(input("enter c: "))
+            result = quadratic(a, b, c)
+            return f"The solutions are: {result}"
+        
     
     if "+" in message_lower or "-" in message_lower or "*" in message_lower:
         try:
@@ -542,16 +587,18 @@ def get_response(message, user_name):
 
     if "board game" in message_lower:
         game = random.choice(board_games)
-        return f"You should try playing {game}"
+        return f"You should try playing {game}, it's really fun! if you want another suggestion, type: 'board game' again!"
     
-    if "bored" in message_lower:
-        activity = input("do you want an idea for a indoor or outdoor activity?")
-        if activity == "indoor activity":
+    if "bored" in message_lower or "indoor activity" in message_lower or "outdoor activity" in message_lower:
+        activity = input("do you want an idea for an indoor or outdoor activity?").strip().lower()
+        if activity == "indoor":
             activity_choice = random.choice(indoor_activities)
             return f"you will really enjoy {activity_choice}"
-        elif activity == "outdoor_activity":
+        elif activity == "outdoor":
             activity_choice = random.choice(outdoor_activities)
             return f"you will really enjoy {activity_choice}"
+        else:
+            return "please type bored again and then type 'indoor' or 'outdoor' so I can suggest something."
     
     if "breakfast" in message_lower or "food" in message_lower:
         idea = random.choice(breakfast_ideas)
@@ -566,34 +613,36 @@ def get_response(message, user_name):
         if choice == 1:
             riddle_choose = play_riddle()
             print_separator()
-            print_bot(f"riddle: {riddle_choose["riddle"]}")
+            print_bot(f"riddle: {riddle_choose['riddle']}")
             print_separator()
             user_answer = input("your answer: ")
-            if  user_answer == riddle_choose["answer"]:
-                return "congratulations, you did it!"
+            if  user_answer == riddle_choose['answer']:
+                return "congratulations, you did it!, if you want another riddle type: 'riddle' or 'question' again!"
             else:
-                return f"you are wrong, the answer is {riddle_choose["answer"]}"
+                return f"you are wrong, the answer is {riddle_choose['answer']}, if you want another riddle type: 'riddle' or 'question' again!"
     
         elif choice == 2:
             question_choose = true_false_game()
             print_separator()
-            print_bot(f"question: {question_choose["question"]}")
+            print_bot(f"question: {question_choose['question']}")
             print_separator()
             user_answer = input("your answer: ")
-            if  user_answer == question_choose["answer"]:
-                return "congratulations, you did it!"
+            if  user_answer == question_choose['answer']:
+                return "congratulations, you did it!, if you want another riddle type: 'riddle' or 'question' again!"
             else:
-                return f"you are wrong, the answer is {question_choose["answer"]}"
+                return f"you are wrong, the answer is {question_choose['answer']}, if you want another riddle type: 'riddle' or 'question' again!"
         elif choice == 3:
             selected_trivia_question = trivia_game()
             print_separator()
-            print_bot(f"trivia question is: {selected_trivia_question["question"]}")
+            print_bot(f"trivia question is: {selected_trivia_question['question']}")
             print_separator()
             user_answer = input("your answer: ")
-            if  user_answer == selected_trivia_question["answer"]:
-                return("congratulations, you did it!")
+            if  user_answer == selected_trivia_question['answer']:
+                return "congratulations, you did it!, if you want another riddle type: 'riddle' or 'question' again!"
             else:
-                return f"you are wrong, the answer is {selected_trivia_question["answer"]}"
+                return f"you are wrong, the answer is {selected_trivia_question['answer']}, if you want another riddle type: 'riddle' or 'question' again!"
+        else:
+            return "please type 'riddles' or 'true false questions' or 'trivia'so I can suggest something."
     
     mood = analyze_mood(message_lower)
     if mood == "happy":
@@ -604,7 +653,7 @@ def get_response(message, user_name):
         return answer
     
     default_respone = random.choice(generic_responses)
-    return default_respone
+    return f"{default_respone}, I'm just a simple bot and I'm still learning, but I hope we can have fun together! " 
 
 
 # =============================================================================
@@ -617,6 +666,8 @@ def chat():
     print_separator()
 
     user_name = greet_user()
+    if user_name.lower() == "alon":
+        print_bot("wow! that's the best name ever, you are so lucky to have it!")
 
     show_help()
 
@@ -652,11 +703,14 @@ def chat():
                 print_separator()
                 print_bot(result)
                 print_separator()
+                print_bot("if you want to play another game, type: 'game'")
             elif user_choice == 2:
                result = play_rps_game()
                print_separator()
                print_bot(result)
                print_separator()
+               print_bot("if you want to play another game, type: 'game'")
+               print()
         elif respone in generic_responses:
             print_bot(respone)
             print()
