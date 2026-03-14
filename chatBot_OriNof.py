@@ -293,6 +293,13 @@ bad_words = [
     "son of a bitch", "wtf","stfu"
 ]
 
+compliments = [
+    "awesome", "amazing", "great", "cool", "nice", "smart",
+    "helpful", "brilliant", "genius", "impressive", "fantastic",
+    "legend", "perfect","wonderful", "incredible", "excellent", 
+    "lovely", "epic", "super", "best"
+]
+
 rps_choices = ["rock", "paper", "scissors"]
 # =============================================================================
 # STEP 2: HELPER FUNCTIONS
@@ -378,7 +385,9 @@ def tell_tips():
 def tell_fact():
     fact = random.choice(facts)
     return fact
-    
+#=============================================================================
+#games functions
+#=============================================================================
 def play_guess_game():
     random_number = random.randint(1, 20)
     attempts = 0
@@ -400,6 +409,8 @@ def play_guess_game():
         elif user_guess == random_number:
             break
     return f"congratulations!!!, you did it in {attempts} tries!!"
+
+#=============================================================================
 
 def play_rps_game():
     bot_wins = 0
@@ -439,8 +450,9 @@ def play_rps_game():
             return "bot win the game!"
         elif user_wins == 3:
             return "user win the game!"
-            
-
+#=============================================================================     
+#mood analysis function
+#==============================================================================
 def analyze_mood(message):
     happy_words = [
                 "happy","joyful", "cheerful", "delighted", "excited", "content", "pleased", "glad", "thrilled",
@@ -450,7 +462,7 @@ def analyze_mood(message):
                 "inspired", "motivated", "peaceful", "relaxed", "thankful", "lucky", "fortunate",
                 "fantastic", "wonderful", "amazing", "great", "excellent", "brilliant", "super", "awesome",
                 "cool", "nice", "kind", "friendly", "lovely", "charming", "warm", "fun", "funny", "lol", "hilarious", "ha", "haha",
-                "lmao", "rofl", "lmfao", "funniest", "hilarious", "humorous", "comical", "witty",]
+                "lmao", "rofl", "lmfao", "funniest", "hilarious", "humorous", "comical", "witty", "good", "fine"]
 
     sad_words = [
                 "sad", "unhappy", "miserable", "depressed", "gloomy", "melancholy", "down", "heartbroken", "lonely",
@@ -470,6 +482,10 @@ def analyze_mood(message):
     
     return "neutral"
 
+#=============================================================================
+#riddles, true false questions and trivia functions
+#==============================================================================
+
 def play_riddle():
     riddle_choose = random.choice(riddles)
     return riddle_choose
@@ -481,7 +497,11 @@ def true_false_game():
 def trivia_game():
     selected_trivia_question = random.choice(trivia_questions)
     return selected_trivia_question
-    
+
+#=============================================================================
+#math problems functions
+#=============================================================================
+
 def quadratic(a, b, c):
     eqation = b**2 - 4*a*c
     
@@ -510,6 +530,17 @@ def get_response(message, user_name):
     for bad_word in bad_words:
         if bad_word in message_lower:
             return random.choice(angry_responses)
+
+    for word in worry_fear_words:
+        if word in message_lower:
+            respon = random.choice(supportive_responses)
+            return respon
+        
+    for compliment in compliments:
+        if compliment in message_lower:
+            return "thank you! that's so nice of you to say, you are really kind to me!"
+
+# =============================================================================
 
     if "how are you" in message_lower:
         return "I'm great! How are you?"
@@ -564,27 +595,6 @@ def get_response(message, user_name):
         show_help()
         return "What else can I help with?"
     
-    if "quadratic" in message_lower:
-            a = float(input("enter a: "))
-            b = float(input("enter b: "))
-            c = float(input("enter c: "))
-            result = quadratic(a, b, c)
-            return f"The solutions are: {result}"
-        
-    
-    if "+" in message_lower or "-" in message_lower or "*" in message_lower:
-        try:
-            result = eval(message_lower)
-            return str(result)
-        except:
-            return "invalid math expression"
-        
-    
-    for word in worry_fear_words:
-        if word in message_lower:
-            respon = random.choice(supportive_responses)
-            return respon
-
     if "board game" in message_lower:
         game = random.choice(board_games)
         return f"You should try playing {game}, it's really fun! if you want another suggestion, type: 'board game' again!"
@@ -603,11 +613,35 @@ def get_response(message, user_name):
     if "breakfast" in message_lower or "food" in message_lower:
         idea = random.choice(breakfast_ideas)
         return f"make a {idea}, it's delicious!"
-    
+
     if "computer games" in message_lower or "vidio games" in message_lower:
         game = random.choice(video_games)
         return f"you will really enjoy playing {game}"
     
+#===========================================================================
+     #math problems
+#===========================================================================
+    if "math" in message_lower or "solve" in message_lower or "equation" in message_lower:
+         return "I can solve quadratic equations and simple math expressions with +, -, * operators, if you want to solve a quadratic equation, type: 'quadratic'"
+    
+    if "quadratic" in message_lower:
+            a = float(input("enter a: "))
+            b = float(input("enter b: "))
+            c = float(input("enter c: "))
+            result = quadratic(a, b, c)
+            return f"The solutions are: {result}"
+        
+    
+    if "+" in message_lower or "-" in message_lower or "*" in message_lower:
+        try:
+            result = eval(message_lower)
+            return str(result)
+        except:
+            return "invalid math expression"
+
+#=============================================================================
+    #riddles, true false questions and trivia
+#=============================================================================
     if "riddle" in message_lower or "question" in message_lower:
         choice = int(input("which game do you want to play? (1 - riddles,2 -  true false questions,3 -  trivia): "))
         if choice == 1:
@@ -644,6 +678,9 @@ def get_response(message, user_name):
         else:
             return "please type 'riddles' or 'true false questions' or 'trivia'so I can suggest something."
     
+#=============================================================================
+    #mood analysis
+#=============================================================================
     mood = analyze_mood(message_lower)
     if mood == "happy":
         answer = random.choice(happy_responses)
@@ -653,12 +690,14 @@ def get_response(message, user_name):
         return answer
     
     default_respone = random.choice(generic_responses)
-    return f"{default_respone}, I'm just a simple bot and I'm still learning, but I hope we can have fun together! " 
+    return f"{default_respone}, I'm just a simple bot and I'm still learning, but I hope we can have fun together!, if you want to know what I can do, type: 'help' or 'commands'" 
 
 
 # =============================================================================
 # STEP 6: MAIN CHAT LOOP
 # =============================================================================
+
+#chat function
 
 def chat():
     print_separator()
@@ -668,6 +707,7 @@ def chat():
     user_name = greet_user()
     if user_name.lower() == "alon":
         print_bot("wow! that's the best name ever, you are so lucky to have it!")
+        print()
 
     show_help()
 
@@ -687,6 +727,9 @@ def chat():
         
         respone = get_response(user_message, user_name)
 
+#=============================================================================
+        #game loop
+#=============================================================================
         if respone == "game_menu":
             print_bot("What would you like to play?" )
             print()
